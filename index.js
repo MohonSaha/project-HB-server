@@ -35,19 +35,14 @@ async function run() {
 
 
 
-    // app.get('/users/owner/:email', verifyJWT, async (req, res) => {
-    //     const email = req.params.email;
+    app.get('/users/owner/:email', async (req, res) => {
+        const email = req.params.email;
 
-    //     const decodedEmail = req.decoded.email;
-    //     if (email !== decodedEmail) {
-    //         return res.send({ admin: false })
-    //     }
-
-    //     const query = { email: email }
-    //     const user = await usersCollection.findOne(query);
-    //     const result = { admin: user?.role === 'admin' };
-    //     res.send(result);
-    // })
+        const query = { email: email }
+        const user = await usersCollection.findOne(query);
+        const result = { owner: user?.role === 'owner' };
+        res.send(result);
+    })
 
 
     app.post('/usersOwner', async (req, res) => {
@@ -81,6 +76,19 @@ async function run() {
 
         const result = await usersCollection.insertOne(newUserData);
         res.send(result);
+    })
+
+
+
+
+
+    // Hotel related APIs
+
+    // Create or add or insert new hotel data:- 
+    app.post('/addHotels', async (req, res) => {
+        const newHotel = req.body;
+        const result = await hotelsCollection.insertOne(newHotel)
+        res.send(result)
     })
 
 
