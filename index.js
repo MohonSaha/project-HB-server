@@ -100,9 +100,13 @@ async function run() {
         })
 
         app.get('/users/owner', async (req, res) => {
-            const email = req.query.email;
+            const email = req.query.ownerEmail;
 
-            const query = { email: email }
+            let query = {};
+            if (req.query?.ownerEmail) {
+                query = { ownerEmail: email }
+            }
+
             const result = await hotelsCollection.find(query).toArray();
             res.send(result);
         })
@@ -129,6 +133,20 @@ async function run() {
 
         // Room related apis:-
 
+
+        app.get('/rooms/owner', async (req, res) => {
+            const email = req.query.ownerEmail;
+
+            let query = {};
+            if (req.query?.ownerEmail) {
+                query = { ownerEmail: email }
+            }
+
+            // const query = { ownerEmail: email }
+            const result = await roomsCollection.find(query).toArray();
+            res.send(result);
+        })
+
         // Get the rooms data
         app.get('/rooms/:id', async (req, res) => {
             const id = req.params.id;
@@ -136,6 +154,8 @@ async function run() {
             const result = await roomsCollection.find(filter).toArray();
             res.send(result)
         })
+
+
 
         // Insert new rooms
         app.post('/addRooms/:id', async (req, res) => {
