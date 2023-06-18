@@ -37,6 +37,26 @@ async function run() {
 
 
 
+        // const indexKeys = { region: 1 };
+        // const indexOptions = { region: "hotelRegion" };
+
+        // const result = await hotelsCollection.createIndex(indexKeys, indexOptions);
+
+
+
+        app.get('/hotelSearchByRegion/:text', async(req, res)=>{
+            const searchText = req.params.text;
+            const result = await hotelsCollection.find({
+                $or: [
+                    {region: {$regex : searchText, $options: "i"}}
+                ]
+            }).toArray()
+            res.send(result)
+        })
+
+
+
+
         app.get('/users/owner/:email', async (req, res) => {
             const email = req.params.email;
 
