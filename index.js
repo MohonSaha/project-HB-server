@@ -93,6 +93,12 @@ async function run() {
             res.send(result)
         })
 
+        app.get('/allHotels', async (req, res) => {
+            const cursor = hotelsCollection.find();
+            const result = await cursor.toArray();
+            res.send(result)
+        })
+
         app.get('/users/owner', async (req, res) => {
             const email = req.query.email;
 
@@ -124,9 +130,9 @@ async function run() {
         // Room related apis:-
 
         // Get the rooms data
-        app.get('/rooms/:id', async(req, res) => {
+        app.get('/rooms/:id', async (req, res) => {
             const id = req.params.id;
-            const filter = {hotelId: id};
+            const filter = { hotelId: id };
             const result = await roomsCollection.find(filter).toArray();
             res.send(result)
         })
@@ -144,9 +150,25 @@ async function run() {
 
         // Booked Room related api:-
 
+        app.get('/booked/room', async (req, res) => {
+            const email = req.query.email;
+
+            const query = { email: email }
+            const result = await bookedCollection.find(query).toArray();
+            res.send(result);
+        })
+
+
         app.post('/booked', async (req, res) => {
             const item = req.body;
             const result = await bookedCollection.insertOne(item);
+            res.send(result);
+        })
+
+        app.delete('/booked/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await bookedCollection.deleteOne(query);
             res.send(result);
         })
 
